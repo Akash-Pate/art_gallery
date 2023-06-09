@@ -10,7 +10,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('connection'));
 
-app.get("/painting", (req, resp) => {
+app.get("/sellers", (req, resp) => {
     try {
         con.query(`SELECT * FROM sellers`, (err, result) => {
             if (err) {
