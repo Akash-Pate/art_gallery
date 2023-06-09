@@ -11,40 +11,79 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('connection'));
 
 app.get("/painting", (req, resp) => {
-    con.query("select * from paintings", (err, result) => {
-        if (err) {
-            resp.send("error")
-        } else {
-            resp.send(result);
-        }
-    });
+    try {
+        con.query(`SELECT * FROM paintings`, (err, result) => {
+            if (err) {
+                resp.status(500).send("Error retrieving paintings");
+            } else {
+                resp.status(200).send(result);
+            }
+        });
+    } catch (err) {
+        resp.status(500).send("Error retrieving paintings");
+    }
 });
-
-
-app.post('/', (req, res) => {
-    const data = req.body;
-    con.query('INSERT INTO paintings set ? ', data, (error, results, fields) => {
-        if (error) throw error;
-        res.send('Data saved to database!');
-    });
+  
+app.post("/", (req, res) => {
+    try {
+        const data = req.body;
+        con.query(`INSERT INTO paintings SET ?`, data, (error, results, fields) => {
+            if (error) {
+                throw error;
+            } else {
+                res.status(200).send("Data saved to database!");
+            }
+        });
+    } catch (err) {
+        res.status(500).send("Error saving data to database");
+    }
 });
-
+  
 app.put("/:id", (req, resp) => {
-    const data = [req.body.name, req.body.price, req.body.image_url, req.body.status, req.body.seller_id, req.params.id];
-    con.query('UPDATE paintings SET name = ?, price = ?, image_url = ?, status = ?, seller_id = ? where id = ?', data, (error, results, fields) => {
-        if (error) throw error;
-        resp.send(results);
-    });
+    try {
+        const data = [
+            req.body.name,
+            req.body.price,
+            req.body.image_url,
+            req.body.status,
+            req.body.seller_id,
+            req.params.id,
+        ];
+        con.query(
+            `UPDATE paintings SET (name, price, image_url, status, seller_id), 
+             Values (?, ?, ?, ?, ?), 
+             WHERE id = ?`, data,
+            (error, results, fields) => {
+                if (error) {
+                    throw error;
+                } else {
+                    resp.status(200).send(results);
+                }
+            }
+        );
+    } catch (err) {
+        resp.status(500).send("Error updating painting");
+    }
 });
 
-app.delete("/:id",(req,resp)=>{
-    con.query('DELETE from paintings WHERE id ='+req.params.id,(error, results, fields)=> {
-        if (error) throw error;
-        resp.send(results);
-    }) 
-})
-
-
+  
+app.delete("/:id", (req, resp) => {
+    try {
+        con.query(
+            `DELETE FROM paintings WHERE id = ` + req.params.id,
+            (error, results, fields) => {
+                if (error) {
+                    throw error;
+                } else {
+                    resp.status(200).send(results);
+                }
+            }
+        );
+    } catch (err) {
+        resp.status(500).send("Error deleting painting");
+    }
+});
+  
 
 app.listen(port, () => {
     console.log(`Server listening on port ${port}`);
