@@ -48,9 +48,8 @@ app.put("/:id", (req, resp) => {
             req.params.id,
         ];
         con.query(
-            `UPDATE sellers SET (name, email_address, password), 
-             Values (?, ?, ?,), 
-             WHERE id = ?`, data,
+            `UPDATE sellers SET (name = ?, email_address = ?, password = ?,  
+             WHERE seller_id = ?`, data,
             (error, results, fields) => {
                 if (error) {
                     throw error;

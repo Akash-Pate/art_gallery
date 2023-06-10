@@ -50,10 +50,8 @@ app.put("/:id", (req, resp) => {
             req.params.id,
         ];
         con.query(
-            `UPDATE purchases SET (date, quantity, amount, painting_id, customer_id), 
-             Values (?, ?, ?, ?, ?), 
-             WHERE id = ?`, data,
-            (error, results, fields) => {
+            `UPDATE purchases SET (date = ?, quantity = ?, amount = ?, painting_id = ?, customer_id = ?  
+             WHERE id = ?`, data,(error, results, fields) => {
                 if (error) {
                     throw error;
                 } else {
