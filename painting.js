@@ -49,8 +49,8 @@ app.put("/:id", (req, resp) => {
             req.params.id,
         ];
         con.query(
-            `UPDATE paintings SET name = ?, price = ?, image_url = ?, status = ?, seller_id = ? WHERE painting_id = ?`,
-            data,(error, results, fields) => {
+            `UPDATE paintings SET name = ?, price = ?, image_url = ?, status = ?, seller_id = ?
+            WHERE painting_id = ?`,data,(error, results, fields) => {
                 if (error) {
                     throw error;
                 } else {
