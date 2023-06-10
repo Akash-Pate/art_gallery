@@ -49,7 +49,7 @@ app.put("/:id", (req, resp) => {
         ];
         con.query(
             `UPDATE customers SET (name = ?, email_address = ?, password = ?  
-             WHERE id = ?`, data,(error, results, fields) => {
+             WHERE customer_id = ?`, data,(error, results, fields) => {
                 if (error) {
                     throw error;
                 } else {
