@@ -48,8 +48,8 @@ app.put("/:id", (req, resp) => {
             req.params.id,
         ];
         con.query(
-            `UPDATE customers SET (name = ?, email_address = ?, password = ?  
-             WHERE customer_id = ?`, data,(error, results, fields) => {
+         `UPDATE customers SET name = ?, email_address = ?, password = ?  
+          WHERE customer_id = ?`, data, (error, results, fields) => {
                 if (error) {
                     throw error;
                 } else {
@@ -66,7 +66,7 @@ app.put("/:id", (req, resp) => {
 app.delete("/:id", (req, resp) => {
     try {
         con.query(
-            `DELETE FROM customers WHERE id = ` + req.params.id,
+            `DELETE FROM customers WHERE customer_id = ` + req.params.id,
             (error, results, fields) => {
                 if (error) {
                     throw error;

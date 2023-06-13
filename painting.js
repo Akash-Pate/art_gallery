@@ -67,7 +67,7 @@ app.put("/:id", (req, resp) => {
 app.delete("/:id", (req, resp) => {
     try {
         con.query(
-            `DELETE FROM paintings WHERE id = ` + req.params.id,
+            `DELETE FROM paintings WHERE painting_id = ` + req.params.id,
             (error, results, fields) => {
                 if (error) {
                     throw error;

@@ -10,7 +10,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('connection'));
 
-app.get("/sellers", (req, resp) => {
+app.get("/seller", (req, resp) => {
     try {
         con.query(`SELECT * FROM sellers`, (err, result) => {
             if (err) {
@@ -48,7 +48,7 @@ app.put("/:id", (req, resp) => {
             req.params.id,
         ];
         con.query(
-            `UPDATE sellers SET (name = ?, email_address = ?, password = ?,  
+            `UPDATE sellers SET name = ?, email_address = ?, password = ?,  
              WHERE seller_id = ?`, data,
             (error, results, fields) => {
                 if (error) {
@@ -67,7 +67,7 @@ app.put("/:id", (req, resp) => {
 app.delete("/:id", (req, resp) => {
     try {
         con.query(
-            `DELETE FROM sellers WHERE id = ` + req.params.id,
+            `DELETE FROM sellers WHERE seller_id = ` + req.params.id,
             (error, results, fields) => {
                 if (error) {
                     throw error;

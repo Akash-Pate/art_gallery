@@ -42,7 +42,7 @@ app.post("/", (req, res) => {
 app.put("/:id", (req, resp) => {
     try {
         const data = [
-            req.body.date,
+            // req.body.date,
             req.body.quantity,
             req.body.amount,
             req.body.painting_id,
@@ -50,7 +50,7 @@ app.put("/:id", (req, resp) => {
             req.params.id,
         ];
         con.query(
-            `UPDATE purchases SET (date = ?, quantity = ?, amount = ?, painting_id = ?, customer_id = ?  
+            `UPDATE purchases SET quantity = ?, amount = ?, painting_id = ?, customer_id = ?  
              WHERE purchase_id = ?`, data,(error, results, fields) => {
                 if (error) {
                     throw error;
@@ -68,7 +68,7 @@ app.put("/:id", (req, resp) => {
 app.delete("/:id", (req, resp) => {
     try {
         con.query(
-            `DELETE FROM purchases WHERE id = ` + req.params.id,
+            `DELETE FROM purchases WHERE purchase_id = ` + req.params.id,
             (error, results, fields) => {
                 if (error) {
                     throw error;
