@@ -1,6 +1,7 @@
 const express = require("express");
 const con = require("./config");
-const bodyParser = require('body-parser')
+const bodyParser = require('body-parser');
+const bcrypt = require("bcryptjs");
 const app = express();
 
 const port = 4000;
@@ -10,6 +11,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('connection'));
 
+//Get all customer
 app.get("/customer", (req, resp) => {
     try {
         con.query(`SELECT * FROM customers`, (err, result) => {
@@ -23,11 +25,21 @@ app.get("/customer", (req, resp) => {
         resp.status(500).send("Error retrieving customers");
     }
 });
-  
-app.post("/", (req, res) => {
+
+//Create a new customer
+app.post("/create_customer", (req, res) => {
     try {
         const data = req.body;
-        con.query(`INSERT INTO customers SET ?`, data, (error, results, fields) => {
+        console.log("Request body:", data);
+
+        const password = data.password;
+        console.log("Received password:", password);
+
+        const hashedPassword = bcrypt.hashSync(password, 10);
+        console.log("Hashed password:", hashedPassword);
+
+        data.password = hashedPassword;
+        con.query(`INSERT INTO customers SET ?` , data, (error, results, fields) => {
             if (error) {
                 throw error;
             } else {
@@ -39,46 +51,65 @@ app.post("/", (req, res) => {
     }
 });
   
-app.put("/:id", (req, resp) => {
+//Update customer
+app.put("/update_customer", (req, resp) => {
     try {
-        const data = [
-            req.body.name,
-            req.body.email_address,
-            req.body.password,
-            req.params.id,
-        ];
+        const data = req.body;
+        console.log("Request body:", data);
+        
+        const password = data.password;
+        console.log("Received password:", password);
+        
+        const hashedPassword = bcrypt.hashSync(password, 10);
+        console.log("Hashed password:", hashedPassword);
+        
+        data.password = hashedPassword;
+        
         con.query(
-         `UPDATE customers SET name = ?, email_address = ?, password = ?  
-          WHERE customer_id = ?`, data, (error, results, fields) => {
+            `UPDATE customers SET name=?, email_address=?, password=?, status=? WHERE customer_id=?`,
+            [data.name, data.email_address, data.password,data.status, data.customer_id],
+            (error, results, fields) => {
                 if (error) {
+                    console.error("Error executing query:", error);
                     throw error;
                 } else {
+                    console.log("Update successful. Affected rows:", results.affectedRows);
                     resp.status(200).send(results);
                 }
             }
         );
     } catch (err) {
+        console.error("Error updating customer:", err);
         resp.status(500).send("Error updating customer");
     }
 });
 
-  
-app.delete("/:id", (req, resp) => {
+
+
+
+//Delete customer 
+app.delete("/delete_customer", (req, resp) => {
     try {
+        const data = req.body;
         con.query(
-            `DELETE FROM customers WHERE customer_id = ` + req.params.id,
+            `UPDATE customers SET name=?, email_address=?, password=?, status=? WHERE customer_id = ?`,
+            [data.name, data.email_address, data.password,data.status, data.customer_id],
             (error, results, fields) => {
                 if (error) {
+                    console.error("Error executing query:", error);
                     throw error;
                 } else {
+                    console.log("Delete successful. Affected rows:", results.affectedRows);
                     resp.status(200).send(results);
                 }
             }
         );
     } catch (err) {
+        console.error("Error deleting customer:", err);
         resp.status(500).send("Error deleting customer");
     }
 });
+
 
 
 

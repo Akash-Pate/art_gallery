@@ -3,7 +3,7 @@
     host:'localhost',
     user:'root',
     password:"" ,
-    database:"art_gallery"
+    database:"test"
  });
  con.connect((err)=> {
     if(err){

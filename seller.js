@@ -10,6 +10,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('connection'));
 
+//Get all sellers
 app.get("/seller", (req, resp) => {
     try {
         con.query(`SELECT * FROM sellers`, (err, result) => {
@@ -24,10 +25,20 @@ app.get("/seller", (req, resp) => {
     }
 });
   
-app.post("/", (req, res) => {
+//Create a new seller
+app.post("/create_seller", (req, res) => {
     try {
         const data = req.body;
-        con.query(`INSERT INTO sellers SET ?`, data, (error, results, fields) => {
+        console.log("Request body:", data);
+
+        const password = data.password;
+        console.log("Received password:", password);
+
+        const hashedPassword = bcrypt.hashSync(password, 10);
+        console.log("Hashed password:", hashedPassword);
+
+        data.password = hashedPassword;
+        con.query(`INSERT INTO sellers SET ?` , data, (error, results, fields) => {
             if (error) {
                 throw error;
             } else {
@@ -38,48 +49,64 @@ app.post("/", (req, res) => {
         res.status(500).send("Error saving data to database");
     }
 });
+
   
-app.put("/:id", (req, resp) => {
+//Update a seller
+app.put("/update_seller", (req, resp) => {
     try {
-        const data = [
-            req.body.name,
-            req.body.email_address,
-            req.body.password,
-            req.params.id,
-        ];
+        const data = req.body;
+        console.log("Request body:", data);
+        
+        const password = data.password;
+        console.log("Received password:", password);
+        
+        const hashedPassword = bcrypt.hashSync(password, 10);
+        console.log("Hashed password:", hashedPassword);
+        
+        data.password = hashedPassword;
+        
         con.query(
-            `UPDATE sellers SET name = ?, email_address = ?, password = ?,  
-             WHERE seller_id = ?`, data,
+            `UPDATE sellers SET name=?, email_address=?, password=?, status=? WHERE customer_id=?`,
+            [data.name, data.email_address, data.password,data.status, data.customer_id],
             (error, results, fields) => {
                 if (error) {
+                    console.error("Error executing query:", error);
                     throw error;
                 } else {
+                    console.log("Update successful. Affected rows:", results.affectedRows);
                     resp.status(200).send(results);
                 }
             }
         );
     } catch (err) {
+        console.error("Error updating seller:", err);
         resp.status(500).send("Error updating seller");
     }
 });
 
-  
-app.delete("/:id", (req, resp) => {
+//Delete a seller  
+app.delete("/delete_seller", (req, resp) => {
     try {
+        const data = req.body;
         con.query(
-            `DELETE FROM sellers WHERE seller_id = ` + req.params.id,
+            `UPDATE sellers SET name=?, email_address=?, password=?, status=? WHERE customer_id=?`,
+            [data.name, data.email_address, data.password,data.status, data.customer_id],
             (error, results, fields) => {
                 if (error) {
+                    console.error("Error executing query:", error);
                     throw error;
                 } else {
+                    console.log("Update successful. Affected rows:", results.affectedRows);
                     resp.status(200).send(results);
                 }
             }
         );
     } catch (err) {
+        console.error("Error deleting seller:", err);
         resp.status(500).send("Error deleting seller");
     }
 });
+       
 
 
 app.listen(port, () => {
