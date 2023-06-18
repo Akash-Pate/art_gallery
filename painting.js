@@ -48,7 +48,8 @@ app.put("/update_painting", (req, resp) => {
         const data = req.body
 
         con.query(
-            `UPDATE paintings SET name = ?, price = ?, image_url = ?, status = ?, seller_id = ? WHERE painting_id = ?`,
+            `UPDATE paintings SET name = ?, price = ?, image_url = ?, status = ?, seller_id = ? 
+             WHERE painting_id = ?`,
             [data.name, data.price, data.image_url, data.status, data.seller_id, data.customer_id],
             (error, results, fields) => {
                 if (error) {
@@ -73,7 +74,8 @@ app.delete("/delete_painting", (req, resp) => {
         const data = req.body
 
         con.query(
-            `UPDATE paintings SET name = ?, price = ?, image_url = ?, status = ?, seller_id = ? WHERE painting_id = ?`,
+            `UPDATE paintings SET name = ?, price = ?, image_url = ?, status = ?, seller_id = ? 
+             WHERE painting_id = ?`,
             [data.name, data.price, data.image_url, data.status, data.seller_id, data.customer_id],
             (error, results, fields) => {
                 if (error) {

@@ -48,7 +48,8 @@ app.put("/update_purchase", (req, resp) => {
         const data = req.body
            
         con.query(
-            `UPDATE purchases SET quantity = ?, amount = ?, painting_id = ?, customer_id = ? WHERE purchase_id = ?`,
+            `UPDATE purchases SET quantity = ?, amount = ?, painting_id = ?, customer_id = ? 
+             WHERE purchase_id = ?`,
              [data.quantity, data.amount, data.painting_id, data.customer_id, data.purchase_id], 
              (error, results, fields) => {
                 if (error) {
@@ -71,7 +72,8 @@ app.delete("/delete_purchase", (req, resp) => {
     try {
         const data = req.body
         con.query(
-            `UPDATE purchases SET quantity = ?, amount = ?, painting_id = ?, customer_id = ? WHERE purchase_id = ?`,
+            `UPDATE purchases SET quantity = ?, amount = ?, painting_id = ?, customer_id = ? 
+             WHERE purchase_id = ?`,
              [data.quantity, data.amount, data.painting_id, data.customer_id, data.purchase_id], 
              (error, results, fields) => {
                 if (error) {

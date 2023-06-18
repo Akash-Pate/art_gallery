@@ -24,7 +24,7 @@ app.get("/seller", (req, resp) => {
         resp.status(500).send("Error retrieving sellers");
     }
 });
-  
+
 //Create a new seller
 app.post("/create_seller", (req, res) => {
     try {
@@ -38,7 +38,7 @@ app.post("/create_seller", (req, res) => {
         console.log("Hashed password:", hashedPassword);
 
         data.password = hashedPassword;
-        con.query(`INSERT INTO sellers SET ?` , data, (error, results, fields) => {
+        con.query(`INSERT INTO sellers SET ?`, data, (error, results, fields) => {
             if (error) {
                 throw error;
             } else {
@@ -50,24 +50,25 @@ app.post("/create_seller", (req, res) => {
     }
 });
 
-  
+
 //Update a seller
 app.put("/update_seller", (req, resp) => {
     try {
         const data = req.body;
         console.log("Request body:", data);
-        
+
         const password = data.password;
         console.log("Received password:", password);
-        
+
         const hashedPassword = bcrypt.hashSync(password, 10);
         console.log("Hashed password:", hashedPassword);
-        
+
         data.password = hashedPassword;
-        
+
         con.query(
-            `UPDATE sellers SET name=?, email_address=?, password=?, status=? WHERE customer_id=?`,
-            [data.name, data.email_address, data.password,data.status, data.customer_id],
+            `UPDATE sellers SET name=?, email_address=?, password=?, status=?
+             WHERE customer_id=?`,
+            [data.name, data.email_address, data.password, data.status, data.customer_id],
             (error, results, fields) => {
                 if (error) {
                     console.error("Error executing query:", error);
@@ -89,8 +90,9 @@ app.delete("/delete_seller", (req, resp) => {
     try {
         const data = req.body;
         con.query(
-            `UPDATE sellers SET name=?, email_address=?, password=?, status=? WHERE customer_id=?`,
-            [data.name, data.email_address, data.password,data.status, data.customer_id],
+            `UPDATE sellers SET name=?, email_address=?, password=?, status=? 
+             WHERE customer_id=?`,
+            [data.name, data.email_address, data.password, data.status, data.customer_id],
             (error, results, fields) => {
                 if (error) {
                     console.error("Error executing query:", error);
@@ -106,7 +108,7 @@ app.delete("/delete_seller", (req, resp) => {
         resp.status(500).send("Error deleting seller");
     }
 });
-       
+
 
 
 app.listen(port, () => {

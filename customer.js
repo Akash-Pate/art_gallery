@@ -66,7 +66,8 @@ app.put("/update_customer", (req, resp) => {
         data.password = hashedPassword;
         
         con.query(
-            `UPDATE customers SET name=?, email_address=?, password=?, status=? WHERE customer_id=?`,
+            `UPDATE customers SET name=?, email_address=?, password=?, status=? 
+             WHERE customer_id=?`,
             [data.name, data.email_address, data.password,data.status, data.customer_id],
             (error, results, fields) => {
                 if (error) {
@@ -92,7 +93,8 @@ app.delete("/delete_customer", (req, resp) => {
     try {
         const data = req.body;
         con.query(
-            `UPDATE customers SET name=?, email_address=?, password=?, status=? WHERE customer_id = ?`,
+            `UPDATE customers SET name=?, email_address=?, password=?, status=? 
+             WHERE customer_id = ?`,
             [data.name, data.email_address, data.password,data.status, data.customer_id],
             (error, results, fields) => {
                 if (error) {
