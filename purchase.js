@@ -24,6 +24,31 @@ app.get("/purchase", (req, resp) => {
         resp.status(500).send("Error retrieving purchases");
     }
 });
+
+app.get("/joins", (req, resp) => {
+    try {
+        const sql = `SELECT customers.*, purchases.purchase_id, paintings.name 
+        FROM  purchases
+        INNER JOIN paintings 
+        ON paintings.painting_id = purchases.painting_id
+        INNER JOIN customers
+        ON customers.customer_id = purchases.customer_id `
+       // ,customers.name,
+        // 
+
+        con.query(sql, (err, result) => {
+            if (err) {
+                console.error('Error executing query:', err);
+                resp.status(500).send("Error retrieving paintings");
+            } else {
+                resp.status(200).send(result);
+            }
+        });
+    } catch (err) {
+        resp.status(500).send("Error retrieving paintings");
+    }
+});
+
   
 //New purchase made
 app.post("/create_purchase", (req, res) => {
