@@ -25,6 +25,28 @@ app.get("/painting", (req, resp) => {
 });
 
 
+// app.get("/joins", (req, resp) => {
+//     try {
+//         const sql = `SELECT paintings.painting_id, sellers.name 
+//         FROM sellers 
+//         FULL outer JOIN paintings 
+//         ON sellers.seller_id = paintings.seller_id
+//         ORDER BY seller.name`
+
+//         con.query(sql, (err, result) => {
+//             if (err) {
+//                 console.error('Error executing query:', err);
+//                 resp.status(500).send("Error retrieving paintings");
+//             } else {
+//                 resp.status(200).send(result);
+//             }
+//         });
+//     } catch (err) {
+//         resp.status(500).send("Error retrieving paintings");
+//     }
+// });
+
+
 // post new paintings
 app.post("/create_painting", (req, res) => {
     try {
